@@ -264,7 +264,7 @@ resource "aws_instance" "fmg1" {
 }
 
 resource "aws_network_interface" "fmg2" {
-  subnet_id = var.subnet_ids[1]
+  subnet_id       = var.subnet_ids[1]
   security_groups = [aws_security_group.fortimanager.id]
 
   tags = merge(var.fortinet_tags, {
