@@ -36,9 +36,6 @@ config system admin setting
     set show_schedule_script enable
     set show_tcl_script enable
 end
-%{ if fmg_license_fortiflex != "" }
-exec vm-license ${fmg_license_fortiflex}
-%{ endif }
 config system ha
     set failover-mode vrrp
 	set clusterid 10
@@ -56,6 +53,9 @@ config system ha
     set vip ${ha_ipaddr}
     set vrrp-interface "port1"
 end
+%{ if fmg_license_fortiflex != "" }
+exec vm-license ${fmg_license_fortiflex}
+%{ endif }
 
 %{ if fmg_license_file != "" }
 --===============0086047718136476635==
