@@ -72,6 +72,7 @@ module "fortimanager" {
   fmg_version                       = var.fmg_version
   fmg_license_type                  = var.fmg_license_type
   admin_cidr                        = var.admin_cidr
+  fortigate_cidr                    = var.fortigate_cidr
   fmg1_byol_license_file            = var.fmg1_byol_license_file
   fmg1_byol_fortiflex_license_token = var.fmg1_byol_fortiflex_license_token
   fmg2_byol_license_file            = var.fmg2_byol_license_file
@@ -80,4 +81,5 @@ module "fortimanager" {
   fmg2_byol_serial_number           = var.fmg2_byol_serial_number
   ha_ip                             = var.ha_ip
   ha_password                       = var.ha_password
+  create_iam_role                   = var.create_iam_role
 }
