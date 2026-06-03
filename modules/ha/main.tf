@@ -165,7 +165,6 @@ resource "aws_eip" "vip" {
   count = var.ha_ip == "public" ? 1 : 0
 
   domain            = "vpc"
-  network_interface = aws_network_interface.fmg1.id
 
   tags = merge(var.fortinet_tags, {
     Name = "${var.prefix}-eip"

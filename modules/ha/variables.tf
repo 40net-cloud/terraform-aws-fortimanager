@@ -191,7 +191,7 @@ variable "fmg_admin_port" {
 variable "create_iam_role" {
   description = "Create IAM role for FortiManager"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "enable_detailed_monitoring" {
