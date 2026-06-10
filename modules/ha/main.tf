@@ -17,7 +17,7 @@ locals {
     peer_serial_number    = var.fmg2_byol_serial_number
     ha_priority           = 100
     ha_password           = var.ha_password
-    ha_ipaddr             = var.ha_ip == "public" ? aws_eip.vip[0].public_ip : null
+    ha_ipaddr             = var.ha_ip == "public" ? aws_eip.vip[0].public_ip : cidrhost(data.aws_subnet.fmg1.cidr_block, 100)
   }
 
   fmg2_name = "${var.prefix}-fmg2"
@@ -30,7 +30,7 @@ locals {
     peer_serial_number    = var.fmg1_byol_serial_number
     ha_priority           = 1
     ha_password           = var.ha_password
-    ha_ipaddr             = var.ha_ip == "public" ? aws_eip.vip[0].public_ip : null
+    ha_ipaddr             = var.ha_ip == "public" ? aws_eip.vip[0].public_ip : cidrhost(data.aws_subnet.fmg1.cidr_block, 100)
   }
 
   # AMI ID selection based on license type
@@ -178,6 +178,8 @@ resource "aws_eip" "vip" {
 resource "aws_network_interface" "fmg1" {
   subnet_id       = var.subnet_ids[0]
   security_groups = [aws_security_group.fortimanager.id]
+  private_ip_list_enabled = true
+  private_ip_list = var.ha_ip == "public" ? [] : [cidrhost(data.aws_subnet.fmg1.cidr_block, 50),local.fmg1_vars.ha_ipaddr]
 
   tags = merge(var.fortinet_tags, {
     Name = "${local.fmg1_name}-nic1"
@@ -263,7 +265,7 @@ resource "aws_instance" "fmg1" {
 }
 
 resource "aws_network_interface" "fmg2" {
-  subnet_id       = var.subnet_ids[1]
+  subnet_id       =  var.ha_ip == "public" ? var.subnet_ids[1] : var.subnet_ids[0]
   security_groups = [aws_security_group.fortimanager.id]
 
   tags = merge(var.fortinet_tags, {
@@ -275,7 +277,7 @@ resource "aws_network_interface" "fmg2" {
 resource "aws_ebs_volume" "fmg2_logs" {
   count = var.enable_log_volume ? 1 : 0
 
-  availability_zone = var.subnet_availability_zones[1]
+  availability_zone = var.ha_ip == "public"? var.subnet_availability_zones[1] : var.subnet_availability_zones[0]
   size              = var.fmg_log_volume_size
   type              = var.fmg_log_volume_type
   encrypted         = true
@@ -299,7 +301,7 @@ resource "aws_instance" "fmg2" {
   instance_type = var.fmg_vmsize
   key_name      = var.key_name
 
-  availability_zone = var.subnet_availability_zones[1]
+  availability_zone = var.ha_ip == "public" ? var.subnet_availability_zones[1] : var.subnet_availability_zones[0]
 
   # Network configuration
   primary_network_interface {

@@ -63,6 +63,12 @@ data "aws_ami" "fortimanager_payg" {
   }
 }
 
+
+# Get fmg1 subnet information
+data "aws_subnet" "fmg1" {
+  id = var.subnet_ids[0]
+}
+
 # Get VPC information
 # data "aws_vpc" "selected" {
 #   count = var.vpc_id != "" ? 1 : 0

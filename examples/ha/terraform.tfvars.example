@@ -10,6 +10,7 @@ subnets = [
 ]
 
 # FortiManager configuration
+fmg_vmsize       = "m5.xlarge"
 fmg_license_type = "byol" # or "byol"
 fmg_version      = "7.6.6"
 key_name         = "your-key-pair-name"
@@ -17,7 +18,7 @@ admin_cidr       = ["0.0.0.0/0"] # Restrict this in production
 fortigate_cidr   = ["0.0.0.0/0"] # Restrict this in production
 
 # HA configuration
-ha_ip = "public" # or "private"
+ha_ip                   = "public" # or "private"
 ha_password             = "test1234"
 fmg1_byol_serial_number = "your license serialnumber"
 fmg2_byol_serial_number = "your license serialnumber"
