@@ -38,19 +38,27 @@ variable "vpc_id" {
 
 variable "subnet_ids" {
   type        = list(string)
-  description = "IDs of two existing subnets to be connected to FortiGate VMs (external, internal, heartbeat, management)"
+  description = "Subnet IDs for FortiManager VMs. Provide 1 subnet for private HA or 2 subnets for public HA."
+
   validation {
-    condition     = length(var.subnet_ids) == 2
-    error_message = "Please provide exactly 2 subnet IDs (fmg1, fmg2)."
+    condition = (
+      (var.ha_ip != "public" && length(var.subnet_ids) == 1) ||
+      (var.ha_ip == "public" && length(var.subnet_ids) == 2)
+    )
+    error_message = "Private HA requires 1 subnet ID; public HA requires exactly 2 subnet IDs."
   }
 }
 
 variable "subnet_availability_zones" {
   type        = list(string)
-  description = "Availability zones of two existing subnets to be connected to FortiGate VMs (external, internal, heartbeat, management)"
+  description = "AZs for FortiManager subnets. Provide 1 AZ for private HA or 2 AZs for public HA."
+
   validation {
-    condition     = length(var.subnet_availability_zones) == 2
-    error_message = "Please provide exactly 2 subnet availability zones (fmg1, fmg2)."
+    condition = (
+      (var.ha_ip != "public" && length(var.subnet_availability_zones) == 1) ||
+      (var.ha_ip == "public" && length(var.subnet_availability_zones) == 2)
+    )
+    error_message = "Private HA requires 1 AZ; public HA requires exactly 2 AZs."
   }
 }
 
@@ -163,7 +171,7 @@ variable "fmg_root_volume_size" {
 variable "fmg_log_volume_size" {
   description = "Size of the log volume in GB"
   type        = number
-  default     = 100
+  default     = 500
 }
 
 variable "fmg_log_volume_type" {

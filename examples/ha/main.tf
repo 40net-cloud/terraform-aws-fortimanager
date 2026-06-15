@@ -66,10 +66,11 @@ module "fortimanager" {
   prefix                            = var.prefix
   region                            = var.region
   vpc_id                            = aws_vpc.vpc.id
-  subnet_ids                        = [aws_subnet.subnets[var.subnets[0].name].id, aws_subnet.subnets[var.subnets[1].name].id]
-  subnet_availability_zones         = [aws_subnet.subnets[var.subnets[0].name].availability_zone, aws_subnet.subnets[var.subnets[1].name].availability_zone]
+  subnet_ids                        = var.ha_ip == "public" ? [aws_subnet.subnets[var.subnets[0].name].id,aws_subnet.subnets[var.subnets[1].name].id] : [aws_subnet.subnets[var.subnets[0].name].id]
+  subnet_availability_zones         = var.ha_ip == "public" ? [aws_subnet.subnets[var.subnets[0].name].availability_zone,aws_subnet.subnets[var.subnets[1].name].availability_zone] : [aws_subnet.subnets[var.subnets[0].name].availability_zone]
   key_name                          = var.key_name
   fmg_version                       = var.fmg_version
+  fmg_vmsize                        = var.fmg_vmsize
   fmg_license_type                  = var.fmg_license_type
   admin_cidr                        = var.admin_cidr
   fortigate_cidr                    = var.fortigate_cidr

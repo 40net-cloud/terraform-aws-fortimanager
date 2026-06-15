@@ -83,8 +83,10 @@ module "fortimanager" {
   username              = var.username
   password              = var.password
   key_name              = var.key_name
+  fmg_vmsize            = var.fmg_vmsize
   fmg_version           = var.fmg_version
   fmg_license_type      = var.fmg_license_type
   admin_cidr            = var.admin_cidr
   fmg_byol_license_file = var.fmg_byol_license_file
+  create_iam_role       = var.create_iam_role
 }

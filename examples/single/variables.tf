@@ -49,6 +49,12 @@ variable "availability_zone" {
 }
 
 # FortiManager configuration
+variable "fmg_vmsize" {
+  description = "EC2 instance type for FortiManager"
+  type        = string
+  default     = "m5.xlarge"
+}
+
 variable "fmg_license_type" {
   description = "License type (byol or payg)"
   type        = string
@@ -104,4 +110,11 @@ variable "fortinet_tags" {
     template  = "FortiManager-Single"
     provider  = "6EB3B02F-50E5-4A3E-8CB8-2E1292583FAZ"
   }
+}
+
+# IAM
+variable "create_iam_role" {
+  description = "Create IAM role for FortiManager"
+  type        = bool
+  default     = true
 }
