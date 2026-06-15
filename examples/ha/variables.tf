@@ -78,6 +78,12 @@ variable "fmg_version" {
   default     = "7.6.6"
 }
 
+variable "fmg_vmsize" {
+  description = "EC2 instance type for FortiManager"
+  type        = string
+  default     = "m5.xlarge"
+}
+
 variable "fmg_license_type" {
   description = "License type (byol or payg)"
   type        = string

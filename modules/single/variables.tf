@@ -135,7 +135,7 @@ variable "fmg_root_volume_size" {
 variable "fmg_log_volume_size" {
   description = "Size of the log volume in GB"
   type        = number
-  default     = 100
+  default     = 500
 }
 
 variable "fmg_log_volume_type" {
@@ -163,7 +163,7 @@ variable "fmg_admin_port" {
 variable "create_iam_role" {
   description = "Create IAM role for FortiManager"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "private_ip" {
