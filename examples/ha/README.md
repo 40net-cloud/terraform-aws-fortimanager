@@ -299,7 +299,7 @@ cluster status: up
 --- cluster member information ---
 
 ip                              : 172.16.137.207
-serial number                   : FMGVMSTM25005639
+serial number                   : FMGVMSTMxxxxx
 hostname                        : fmg2
 role                            : secondary
 status                          : up
