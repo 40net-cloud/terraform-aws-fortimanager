@@ -13,8 +13,8 @@ The module supports two topologies, both using VRRP for automatic failover and d
 
 1. **VRRP Automatic Failover with Public VIP**
 
-fmg1 and fmg2 land in different subnets / AZs cross-AZ resilience.
-Each node gets its own EIP, plus public VIP attached to fmg1.
+FortiManager A and FortiManager B land in different subnets / AZs cross-AZ resilience.
+Each node gets its own EIP, plus public VIP attached to FortiManager A.
 Once the HA cluster is successfully formed, FazUtil creates a secondary private IP address on eni1 interface of both FortiManager instances and assigns the public VIP to the primary FortiManager. During a failover , the public VIP is automatically reassigned to the new primary FortiManager, ensuring continuous management access.
 
 ![FortiManager HA VRRP VIP Private IP design](images/fmg-vrrp-pubilc-vip.png)
@@ -23,7 +23,7 @@ Once the HA cluster is successfully formed, FazUtil creates a secondary private 
 
 Both nodes sit in the same subnet / AZ.
 By default, no public IP addresses are assigned to the FortiManager instances. If direct management access from the internet is required, you can optionally assign public IP addresses to the management interfaces of the FortiManager nodes.
-fmg1's ENI carries two private IPs: a primary address and the secondary private VIP HA address. Failover moves this secondary private IP between nodes.
+FortiManager A's ENI carries two private IPs: a primary address and the secondary private VIP HA address. Failover moves this secondary private IP between nodes.
 
 ![FortiManager HA VRRP VIP Private IP design](images/fmg-vrrp-private-vip.png)
 
@@ -166,12 +166,13 @@ end
 ```
 terraform-aws-fortimanager/
 ├── modules/
-│   └── ha/                       # HA FortiManager deployment module
+│   ├── ha/                       # HA FortiManager deployment module
 ├── examples/
-│   ├── main.tf                   # Example deployment configuration
-│   ├── variables.tf              # Input variable definitions
-│   ├── terraform.tfvars.example  # Example variable values
-│   └── outputs.tf                # Deployment outputs
+│   ├── ha/                       # HA example deployment
+│   │   ├── main.tf
+│   │   ├── variables.tf
+│   │   ├── terraform.tfvars.example
+│   │   ├── outputs.tf
 └── README.md
 ```
 
