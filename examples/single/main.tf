@@ -89,4 +89,5 @@ module "fortimanager" {
   admin_cidr            = var.admin_cidr
   fmg_byol_license_file = var.fmg_byol_license_file
   create_iam_role       = var.create_iam_role
+  private_ip            = var.private_ip
 }

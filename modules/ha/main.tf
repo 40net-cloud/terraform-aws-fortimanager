@@ -17,7 +17,7 @@ locals {
     peer_serial_number    = var.fmg2_byol_serial_number
     ha_priority           = 100
     ha_password           = var.ha_password
-    ha_ipaddr             = var.ha_ip == "public" ? aws_eip.vip[0].public_ip : cidrhost(data.aws_subnet.fmg1.cidr_block, 100)
+    ha_ipaddr             = var.ha_ip == "public" ? aws_eip.vip[0].public_ip : (var.fmg_ha_private_ip != "" ? var.fmg_ha_private_ip : cidrhost(data.aws_subnet.fmg1.cidr_block, 100))
   }
 
   fmg2_name = "${var.prefix}-fmg2"
@@ -30,7 +30,7 @@ locals {
     peer_serial_number    = var.fmg1_byol_serial_number
     ha_priority           = 1
     ha_password           = var.ha_password
-    ha_ipaddr             = var.ha_ip == "public" ? aws_eip.vip[0].public_ip : cidrhost(data.aws_subnet.fmg1.cidr_block, 100)
+    ha_ipaddr             = var.ha_ip == "public" ? aws_eip.vip[0].public_ip : (var.fmg_ha_private_ip != "" ? var.fmg_ha_private_ip : cidrhost(data.aws_subnet.fmg1.cidr_block, 100))
   }
 
   # AMI ID selection based on license type
@@ -179,7 +179,7 @@ resource "aws_network_interface" "fmg1" {
   subnet_id       = var.subnet_ids[0]
   security_groups = [aws_security_group.fortimanager.id]
   private_ip_list_enabled = true
-  private_ip_list = var.ha_ip == "public" ? [] : [cidrhost(data.aws_subnet.fmg1.cidr_block, 50),local.fmg1_vars.ha_ipaddr]
+  private_ip_list = var.ha_ip == "public" ? [] : [(var.fmg1_private_ip != "" ? var.fmg1_private_ip : cidrhost(data.aws_subnet.fmg1.cidr_block, 50)), local.fmg1_vars.ha_ipaddr]
 
   tags = merge(var.fortinet_tags, {
     Name = "${local.fmg1_name}-nic1"
@@ -265,8 +265,9 @@ resource "aws_instance" "fmg1" {
 }
 
 resource "aws_network_interface" "fmg2" {
-  subnet_id       =  var.ha_ip == "public" ? var.subnet_ids[1] : var.subnet_ids[0]
+  subnet_id       = var.ha_ip == "public" ? var.subnet_ids[1] : var.subnet_ids[0]
   security_groups = [aws_security_group.fortimanager.id]
+  private_ips     = var.fmg2_private_ip != "" ? [var.fmg2_private_ip] : null
 
   tags = merge(var.fortinet_tags, {
     Name = "${local.fmg2_name}-nic1"

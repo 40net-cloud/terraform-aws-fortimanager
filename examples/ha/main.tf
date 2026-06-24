@@ -83,4 +83,7 @@ module "fortimanager" {
   ha_ip                             = var.ha_ip
   ha_password                       = var.ha_password
   create_iam_role                   = var.create_iam_role
+  fmg1_private_ip                   = var.fmg1_private_ip
+  fmg2_private_ip                   = var.fmg2_private_ip
+  fmg_ha_private_ip                 = var.fmg_ha_private_ip
 }

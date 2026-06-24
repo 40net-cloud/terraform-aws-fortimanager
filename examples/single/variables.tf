@@ -118,3 +118,10 @@ variable "create_iam_role" {
   type        = bool
   default     = true
 }
+
+# Network - reserved private IP (optional)
+variable "private_ip" {
+  description = "Reserved private IP for the FortiManager instance. Leave empty for dynamic assignment."
+  type        = string
+  default     = ""
+}
