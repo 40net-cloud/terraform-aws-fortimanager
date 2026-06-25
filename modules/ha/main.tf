@@ -164,7 +164,7 @@ resource "aws_eip" "fmg2" {
 resource "aws_eip" "vip" {
   count = var.ha_ip == "public" ? 1 : 0
 
-  domain            = "vpc"
+  domain = "vpc"
 
   tags = merge(var.fortinet_tags, {
     Name = "${var.prefix}-eip"
@@ -176,10 +176,10 @@ resource "aws_eip" "vip" {
 ##############################################################################################################
 # Network interface for FortiManager
 resource "aws_network_interface" "fmg1" {
-  subnet_id       = var.subnet_ids[0]
-  security_groups = [aws_security_group.fortimanager.id]
+  subnet_id               = var.subnet_ids[0]
+  security_groups         = [aws_security_group.fortimanager.id]
   private_ip_list_enabled = true
-  private_ip_list = var.ha_ip == "public" ? [] : [(var.fmg1_private_ip != "" ? var.fmg1_private_ip : cidrhost(data.aws_subnet.fmg1.cidr_block, 50)), local.fmg1_vars.ha_ipaddr]
+  private_ip_list         = var.ha_ip == "public" ? [] : [(var.fmg1_private_ip != "" ? var.fmg1_private_ip : cidrhost(data.aws_subnet.fmg1.cidr_block, 50)), local.fmg1_vars.ha_ipaddr]
 
   tags = merge(var.fortinet_tags, {
     Name = "${local.fmg1_name}-nic1"
@@ -278,7 +278,7 @@ resource "aws_network_interface" "fmg2" {
 resource "aws_ebs_volume" "fmg2_logs" {
   count = var.enable_log_volume ? 1 : 0
 
-  availability_zone = var.ha_ip == "public"? var.subnet_availability_zones[1] : var.subnet_availability_zones[0]
+  availability_zone = var.ha_ip == "public" ? var.subnet_availability_zones[1] : var.subnet_availability_zones[0]
   size              = var.fmg_log_volume_size
   type              = var.fmg_log_volume_type
   encrypted         = true
